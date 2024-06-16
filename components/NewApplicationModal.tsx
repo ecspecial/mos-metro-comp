@@ -59,7 +59,10 @@ const railwayOptions = [
 ];
 
 const NewApplicationModal: React.FC<NewApplicationModalProps> = ({ isOpen, onClose, onApplicationCreated }) => {
-    const [application, setApplication] = useState<Partial<Application>>({});
+    const [application, setApplication] = useState<Partial<Application>>({
+        maleStaffCount: 0, // Default value set to 0
+        femaleStaffCount: 0 // Default value set to 0
+    });
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [selectedStation1, setSelectedStation1] = useState<SingleValue<OptionType>>(null);
@@ -103,6 +106,10 @@ const NewApplicationModal: React.FC<NewApplicationModalProps> = ({ isOpen, onClo
     }, []);
 
     const handleInputChange = (field: keyof Application, value: any) => {
+        // Parse integer values for staff count to prevent NaN issues
+        if (field === "maleStaffCount" || field === "femaleStaffCount") {
+            value = parseInt(value) || 0; // Default to 0 if NaN
+        }
         setApplication(prev => ({
             ...prev,
             [field]: value,
@@ -319,9 +326,10 @@ const NewApplicationModal: React.FC<NewApplicationModalProps> = ({ isOpen, onClo
                         <FormLabel>Количество сотрудников мужского пола</FormLabel>
                         <NumberInput
                             value={application.maleStaffCount || 0}
-                            onChange={(valueString) => handleInputChange('maleStaffCount', parseInt(valueString))}
+                            onChange={(valueString) => handleInputChange('maleStaffCount', valueString)}
+                            min={0}
                         >
-                           <NumberInputField />
+                            <NumberInputField />
                         </NumberInput>
                     </FormControl>
 
@@ -329,7 +337,8 @@ const NewApplicationModal: React.FC<NewApplicationModalProps> = ({ isOpen, onClo
                         <FormLabel>Количество сотрудников женского пола</FormLabel>
                         <NumberInput
                             value={application.femaleStaffCount || 0}
-                            onChange={(valueString) => handleInputChange('femaleStaffCount', parseInt(valueString))}
+                            onChange={(valueString) => handleInputChange('femaleStaffCount', valueString)}
+                            min={0}
                         >
                             <NumberInputField />
                         </NumberInput>
