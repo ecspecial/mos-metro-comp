@@ -1,0 +1,62 @@
+.application_container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* background-color: #dcdcdc4f; */
+    box-shadow: inset;
+}
+
+.application_page_button_group {
+    padding: 10px;
+}
+
+.application_card {
+    /* margin-top: 1rem; */
+    box-shadow: 0 8px 16px #dcdcdc !important;
+    /* border: 2px solid red !important; */
+}
+
+.application_header {
+    margin-bottom: 1rem;
+}
+
+.application_details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loading_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.application_footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    /* border: 2px solid red; */
+    width: 100%;
+
+}
+
+@media screen and (max-width: 768px) {
+    .application_footer {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+}
+
+.application_details_time_input {
+    margin-left: 10px;
+    border-width: 0;
+    border-style: solid;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    outline: none;
+    font-size: 16px;
+    max-width: 50px;
+}

@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_DATABASE_URL")
+}
+
+model User {
+  id                     Int                   @id @default(autoincrement())
+  login                  String                @unique
+  password               String
+  role                   String
+  createdAt              String                @map("registered_date")                
+  employee               Employee?
+  @@map("users")
+  @@unique([login, password])
+}
+
+model Station {
+  id                       Int                   @id
+  name                     String                @map("name_station")
+  lineName                 String                @map("name_line")
+  lineId                   Int                   @map("id_line")
+  travelTimesAsStart       TravelTime[]          @relation("StationStart")
+  travelTimesAsEnd         TravelTime[]          @relation("StationEnd")
+  transferTimesAsStart     TransferTime[]        @relation("TransferStart")
+  transferTimesAsEnd       TransferTime[]        @relation("TransferEnd")
+  requestsAsStart          Application[]         @relation("RequestStart")
+  requestsAsEnd            Application[]         @relation("RequestEnd")
+  @@map("stations")
+  @@unique([name, lineId])
+}
+
+model TravelTime {
+  id                       Int                   @id @default(autoincrement())
+  station1Id               Int                   @map("id_st1")
+  station2Id               Int                   @map("id_st2")
+  time                     Float                 @map("time")
+  station1                 Station               @relation(name: "StationStart", fields: [station1Id], references: [id])
+  station2                 Station               @relation(name: "StationEnd", fields: [station2Id], references: [id])
+  @@map("travel_times")
+  @@unique([station1Id, station2Id])
+}
+
+model TransferTime {
+  id                       Int                   @id @default(autoincrement())
+  station1Id               Int                   @map("id_st1")
+  station2Id               Int                   @map("id_st2")
+  time                     Float                 @map("time")
+  station1                 Station               @relation(name: "TransferStart", fields: [station1Id], references: [id])
+  station2                 Station               @relation(name: "TransferEnd", fields: [station2Id], references: [id])
+  @@map("transfer_times")
+  @@unique([station1Id, station2Id])
+}
+
+model Employee {
+  id                       Int                   @id @default(autoincrement())
+  fullName                 String                @map("full_name")
+  shortName                String                @map("fio")
+  gender                   String                @map("sex")
+  lunchBreak               String                @map("lunch_break")
+  timeWork                 String                @map("time_work")
+  shift                    String                @map("smena")
+  workPhone                String                @map("work_phone") @unique
+  personalPhone            String                @map("personal_phone") @unique
+  rankNumber               String                @map("tabel_number") @unique
+  entryDate                String                @map("date")
+  section                  String                @map("uchastok")
+  rank                     String                @map("doljnost")
+  workStatus               String?               @map("work_status")
+  extraShift               String?               @map("dop_smena")
+  studyTime                String?               @map("study_time")
+  workTimeChange           String?               @map("time_work_change")
+  internship               Boolean               @map("stajirovka")
+  user                     User?                 @relation(fields: [userId], references: [id])
+  userId                   Int?                  @unique @map("user_id")
+  assignments              ApplicationAssignment[]
+  editingStatus            Boolean               @default(false)
+  @@map("workers")
+}
+
+model Passenger {
+  id                       Int                   @id @default(autoincrement())
+  fullName                 String                @map("fio")
+  phoneNumbers             Json                  @map("phone_numbers")
+  gender                   String                @map("sex")
+  category                 String                @map("cat_pas")
+  additionalInfo           String                @map("additional_info")
+  createdAt                String                @map("registered_date")
+  eks                      Boolean
+  applications             Application[]
+  editingStatus            Boolean               @map("editing_status") @default(false)
+  @@map("passengers")
+}
+
+model Application {
+  id                       Int                   @id @default(autoincrement())
+  passengerId              Int                   @map("id_pas") 
+  datetime                 String                @map("applications_date") 
+  startTime                String?               @map("time3")
+  endTime                  String?               @map("time4")
+  category                 String                @map("cat_pas")
+  status                   String
+  registrationTime         String                @map("tpz")
+  maleStaffCount           Int                   @map("insp_sex_m")
+  femaleStaffCount         Int                   @map("insp_sex_f")
+  station1Id               Int                   @map("id_st1")
+  station2Id               Int                   @map("id_st2")
+  applicationType          String                @map("application_type")
+  railway                  String?               @map("railway")
+  transferStations         Json                  @map("transfer_stations")
+  pathTime                 Float                 @map("path_time")
+  pathString               String?               @map("path_string")
+  description              String                @map("application_description")
+  passengerQty             Int                   @map("passanger_qty")
+  baggage                  String?
+  station1                 Station               @relation(name: "RequestStart", fields: [station1Id], references: [id])
+  station2                 Station               @relation(name: "RequestEnd", fields: [station2Id], references: [id])
+  passenger                Passenger             @relation(fields: [passengerId], references: [id])
+  assignments              ApplicationAssignment[]
+  cancellations            Cancellation[]
+  changes                  RequestChange[]
+  noShows                  NoShow[]
+  editingStatus            Boolean?              @default(false)
+  @@map("applications")
+}
+
+model ApplicationAssignment {
+  id                       Int                   @id @default(autoincrement())
+  applicationId            Int                   @map("id_application")
+  employeeId               Int                   @map("id_worker")
+  startTime                String?               @map("start_time")
+  endTime                  String?               @map("end_time")
+  application              Application           @relation(fields: [applicationId], references: [id])
+  employee                 Employee              @relation(fields: [employeeId], references: [id])
+  @@map("application_assignments")
+  @@unique([applicationId, employeeId])
+}
+
+model Cancellation {
+  id                       Int                   @id @default(autoincrement())
+  requestId                Int                   @map("id_bid")
+  dateTime                 DateTime              @map("date_time")
+  request                  Application           @relation(fields: [requestId], references: [id])
+  @@map("application_cancellations")
+}
+
+model RequestChange {
+  id                       Int                   @id @default(autoincrement())
+  requestId                Int                   @map("id_bid")
+  editTime                 String                @map("time_edit")
+  startTime                String                @map("time_s")
+  endTime                  String?               @map("time_f")
+  request                  Application           @relation(fields: [requestId], references: [id])
+  @@map("application_changes")
+}
+
+model NoShow {
+  id                       Int                   @id @default(autoincrement())
+  requestId                Int                   @map("id_bid")
+  dateTime                 String                @map("date_time")
+  request                  Application           @relation(fields: [requestId], references: [id])
+  @@map("application_no_shows")
+}

@@ -3,31 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --chakra-colors-body-bg: #fff;
+  --chakra-colors-text: black;
+  --chakra-lineHeights-text: 1.5;
+  --chakra-colors-accent: #D4212D;
+  --chakra-radii-md: 0.8rem;
+  --chakra-colors-white: #FFFFFF;
+  --chakra-colors-neutralGray: #979797;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--chakra-colors-text);
+  line-height: var(--chakra-lineHeights-text);
+  font-size: 16px;
+  font-weight: 300;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
+
+/* .react-datepicker__time-container {
+  display: none;
+} */

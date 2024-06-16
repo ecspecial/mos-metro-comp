@@ -1,0 +1,47 @@
+.login_modal_login_button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    height: 40px;
+    align-items: center;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    background-color: var(--chakra-colors-accent);
+    border-radius: var(--chakra-radii-md);
+    color: var(--chakra-colors-white);
+    font-size: 16px;
+    font-weight: 500;
+    transition: box-shadow 0.15s ease-out;
+}
+
+@media screen and (max-width: 768px) {
+    .login_modal_login_button {
+        padding-inline-start: 0.5rem;
+        padding-inline-end: 0.5rem;
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;
+        gap: 0.5rem;
+    }
+}
+
+.login_modal_login_button svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+}
+
+.input_error {
+    color: var(--chakra-colors-accent);
+    /* font-size: 12px;
+    margin-bottom: 1rem;
+    padding: 5px; */
+}
+
+.input_password_show {
+    height: 100%;
+    align-content: center;
+}
