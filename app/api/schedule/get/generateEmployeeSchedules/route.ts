@@ -355,7 +355,7 @@ const isWorkerAvailable = async (worker: any, application: any, assignments: Ass
 };
 
 // Function to determine which group is working on a given date
-export const getWorkingGroup = (currentDate: Date): number => {
+const getWorkingGroup = (currentDate: Date): number => {
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1).getTime(); // First day of the year in milliseconds
     const dayDifference = Math.floor((currentDate.getTime() - startOfYear) / (1000 * 60 * 60 * 24)); // Difference in days
     const cycleDay = dayDifference % 4; // 4-day cycle
