@@ -111,23 +111,37 @@ const ApplicationsPage = () => {
   return (
     <>
         <div className={styles['application_container']}>
-          {
-            applications.length === 0 && !isFetching ? (
+          {applications.length === 0 && !isFetching ? (
+            <>
               <p>Не найдено назначенных заявок.</p>
-            ) : (
+              {(role === 'администратор' || role === 'специалист' || role === 'ЦИО') && (
+                <div className={styles['application_page_button_group']}>
+                  <Button
+                    className={`${styles['header_login_button_wrapper']} ${styles['nav_link']}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleApplicationModal();
+                    }}
+                  >
+                    Новая заявка
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
               <>
                 {(role === 'администратор' || role === 'специалист' || role === 'ЦИО') ? (
                     <div className={styles['application_page_button_group']}>
-                    <Button
-                        className={`${styles['header_login_button_wrapper']} ${styles['nav_link']}`} 
-                        onClick={(e) => {
-                            e.preventDefault();
-                            toggleApplicationModal();
-                        }}
-                    >
-                        Новая заявка
-                    </Button>
-                </div>
+                      <Button
+                          className={`${styles['header_login_button_wrapper']} ${styles['nav_link']}`} 
+                          onClick={(e) => {
+                              e.preventDefault();
+                              toggleApplicationModal();
+                          }}
+                      >
+                          Новая заявка
+                      </Button>
+                  </div>
                 ) : (
                   <div className={styles['application_page_button_group']}>
                     <Text><strong>Обед:</strong> {applications[0].assignments[0].employee.lunchBreak}</Text>                
